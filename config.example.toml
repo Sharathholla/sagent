@@ -1,0 +1,78 @@
+# sagent configuration -> copy to ~/.sagent/config (`sagent init` does this for you).
+# This file holds credentials: keep it private (sagent sets 0600 / user-only ACL).
+#
+# Every value can be overridden by an environment variable named
+# SAGENT_<SECTION>_<KEY>, e.g. SAGENT_JIRA_API_TOKEN or SAGENT_SLACK_TOKEN.
+# Lists are comma-separated in env vars: SAGENT_BITBUCKET_ALLOWED_WORKSPACES=a,b
+#
+# Sections you do not fill in are simply skipped.
+# Every integration is READ-ONLY until you set allow_writes = true.
+
+[claude]
+# command = "claude"          # path to the Claude Code executable
+# model   = ""                # optional model alias, e.g. "sonnet"
+
+# Used when you run `sagent use agy` (Antigravity CLI, signs in with your Google account).
+[agy]
+# command = "agy"             # path to the agy executable
+# model   = ""                # optional model name; see `agy models`
+
+# --- Bitbucket Cloud -------------------------------------------------------
+# Pick ONE auth style:
+#   1) Atlassian API token:  email + api_token
+#   2) Legacy app password:  username + app_password
+#   3) Repo/workspace access token:  access_token
+[bitbucket]
+email = "you@example.com"
+api_token = "REPLACE_ME"
+# username = ""
+# app_password = ""
+# access_token = ""
+allowed_workspaces = ["my-workspace"]   # required: sagent refuses anything else
+allowed_projects = []                   # optional project keys, e.g. ["PLAT"]
+allow_writes = false
+
+# --- Jira Cloud ------------------------------------------------------------
+[jira]
+base_url = "https://your-site.atlassian.net"
+email = "you@example.com"
+api_token = "REPLACE_ME"
+allowed_projects = []                   # optional project keys, e.g. ["ABC"]
+allow_writes = false
+
+# --- Confluence Cloud ------------------------------------------------------
+[confluence]
+base_url = "https://your-site.atlassian.net"
+email = "you@example.com"
+api_token = "REPLACE_ME"
+allowed_spaces = []                     # optional space keys, e.g. ["ENG"]
+allow_writes = false
+
+# --- Slack -----------------------------------------------------------------
+[slack]
+token = "xoxb-REPLACE_ME"               # bot (xoxb-) or user (xoxp-) token
+allowed_channels = []                   # channel names or IDs, e.g. ["general", "C0123456789"]; required for posting
+allow_writes = false
+
+# --- AWS (via the AWS CLI) -------------------------------------------------
+# By default sagent uses your existing AWS CLI setup in ~/.aws (credentials, config,
+# SSO via `aws sso login`); nothing is needed here. Optional overrides:
+#   profile = a named profile from ~/.aws/config, or access keys below.
+[aws]
+# profile = "default"
+# access_key_id = "AKIAREPLACEME"
+# secret_access_key = "REPLACE_ME"
+# session_token = ""
+# region = "us-east-1"
+allow_writes = false
+
+# --- Azure (via the Azure CLI) ---------------------------------------------
+# By default sagent uses your existing `az login` state in ~/.azure and the current
+# default subscription (pass --subscription in commands to pick another).
+# Optional: a service principal, run in an isolated profile (~/.sagent/azure).
+[azure]
+# tenant_id = "00000000-0000-0000-0000-000000000000"
+# client_id = "00000000-0000-0000-0000-000000000000"
+# client_secret = "REPLACE_ME"
+# subscription_id = ""          # service principal mode only
+allow_writes = false

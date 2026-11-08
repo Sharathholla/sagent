@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sagent"
+version = "0.1.0"
+description = "Cross-platform CLI agent that wraps Claude Code and exposes Bitbucket, Jira, Confluence, Slack, AWS and Azure as safe tools."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.31",
+    "tomli>=2.0; python_version < '3.11'",
+]
+
+[project.scripts]
+sagent = "sagent.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sagent*"]
