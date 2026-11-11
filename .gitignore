@@ -5,3 +5,7 @@ build/
 dist/
 config
 *.log
+*.pem
+.env
+.DS_Store
+.sagent/

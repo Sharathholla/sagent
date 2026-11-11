@@ -17,6 +17,15 @@
 # command = "agy"             # path to the agy executable
 # model   = ""                # optional model name; see `agy models`
 
+# --- GitHub ----------------------------------------------------------------
+# Authenticate using a Personal Access Token (PAT).
+# Create a PAT at https://github.com/settings/tokens with repo, read:org scopes.
+[github]
+pat = "REPLACE_ME"                           # GitHub Personal Access Token (github_pat_...)
+allowed_repos = []                           # optional repo list, e.g. ["owner/repo1", "owner/repo2"]
+allowed_orgs = []                            # optional organization list, e.g. ["myorg"]
+allow_writes = false
+
 # --- Bitbucket Cloud -------------------------------------------------------
 # Pick ONE auth style:
 #   1) Atlassian API token:  email + api_token

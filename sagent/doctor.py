@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 from typing import List, Tuple
 
-from . import agent, config, integrations, providers, redact, style
+from . import agent, config, integrations, installers, providers, redact, style
 from .errors import SagentError
 
 
@@ -108,6 +109,15 @@ def run(cfg: config.Config) -> int:
         except Exception as exc:  # noqa: BLE001
             _line("FAIL", f"{integ.name}: unexpected {type(exc).__name__}")
             failures += 1
+
+    print("\n" + style.heading("Optional tools"))
+    for tool in installers.all_tools():
+        if tool.find():
+            _line("ok", f"{tool.label}: installed")
+        else:
+            _line("skip", f"{tool.label}: not installed ({tool.purpose})")
+            if tool.command():
+                print(f"  Install with: {style.cyan(tool.command())}")
 
     print()
     print(style.paint("All checks passed.", "bold", "green") if not failures

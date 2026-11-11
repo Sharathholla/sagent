@@ -14,6 +14,7 @@ from . import providers, style
 
 AWS_DOCS = "https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html"
 AZURE_DOCS = "https://learn.microsoft.com/cli/azure/install-azure-cli"
+KUBECTL_DOCS = "https://kubernetes.io/docs/tasks/tools/install-kubectl/"
 
 
 @dataclass
@@ -55,6 +56,19 @@ def _azure_command() -> Optional[str]:
     return None
 
 
+def _kubectl_command() -> Optional[str]:
+    if os.name == "nt":
+        return _winget("Kubernetes.kubectl")
+    if sys.platform == "darwin":
+        return "brew install kubectl" if shutil.which("brew") else None
+    if sys.platform.startswith("linux"):
+        if Path("/etc/debian_version").exists():
+            return "sudo apt-get update && sudo apt-get install -y kubectl"
+        elif Path("/etc/redhat-release").exists():
+            return "sudo yum install -y kubectl"
+    return None
+
+
 def _ai_tool(name: str, purpose: str) -> ExternalTool:
     return ExternalTool(
         key=name, label=providers.LABEL[name], purpose=purpose,
@@ -72,6 +86,8 @@ def all_tools() -> List[ExternalTool]:
                      _aws_command, AWS_DOCS, "Then sign in: aws configure  (or aws sso login)."),
         ExternalTool("azure", "Azure CLI", "needed for the azure integration", lambda: shutil.which("az"),
                      _azure_command, AZURE_DOCS, "Then sign in: az login."),
+        ExternalTool("kubectl", "kubectl", "needed for the kubeconfig integration", lambda: shutil.which("kubectl"),
+                     _kubectl_command, KUBECTL_DOCS, "Then configure your kubeconfig: export KUBECONFIG=~/.kube/config or follow kubeconfig setup."),
     ]
 
 
